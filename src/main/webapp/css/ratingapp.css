@@ -6923,3 +6923,14 @@ table.dataTable thead .sorting:after {
         transform: rotate(360deg);
     }
 }
+
+
+.idk-item .jsgrid-cell{
+    background-color: #e2dfdf !important;
+}
+.difficult-item .jsgrid-cell{
+    background-color: #ffc9c4 !important;
+}
+.bot .jsgrid-cell{
+    background-color: #ffc9 !important;
+}

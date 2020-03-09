@@ -15,6 +15,7 @@
 /Users/admin/personal/interrate/myRatingApp/src/main/java/uni/umons/ratingwebapp/repository/GitUserRepositoryImpl.java
 /Users/admin/personal/interrate/myRatingApp/src/main/java/uni/umons/ratingwebapp/config/RepositoryConfig.java
 /Users/admin/personal/interrate/myRatingApp/src/main/java/uni/umons/ratingwebapp/domain/GitUser.java
+/Users/admin/personal/interrate/myRatingApp/src/main/java/uni/umons/ratingwebapp/domain/dto/RatedGitUserDto.java
 /Users/admin/personal/interrate/myRatingApp/src/main/java/uni/umons/ratingwebapp/domain/dto/UserDto.java
 /Users/admin/personal/interrate/myRatingApp/src/main/java/uni/umons/ratingwebapp/domain/dto/CommentDto.java
 /Users/admin/personal/interrate/myRatingApp/src/main/java/uni/umons/ratingwebapp/domain/User.java

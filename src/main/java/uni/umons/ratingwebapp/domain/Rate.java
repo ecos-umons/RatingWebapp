@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 		{       @NamedNativeQuery(name = "Rate.getStats",
 				resultSetMapping = "myMapping1",
 				query = "SELECT rater_id as userId, COUNT(*) AS totalRate, COUNT(IF(rate='1',1,null)) As humanRate, COUNT(IF(rate='2',1,null)) AS botRate, " +
-						"COUNT(IF(rate='3',1,null)) AS idkRate, COUNT(IF(rate_diffuculty='1',1,null)) AS veryEasyRate, COUNT(IF(rate_diffuculty='2',1,null)) AS easyRate, " +
-						"COUNT(IF(rate_diffuculty='3',1,null)) AS difficultRate, COUNT(IF(rate_diffuculty='4',1,null)) AS veryDifficultRate, " +
-						"COUNT(IF(rate_diffuculty='0',1,null)) AS noDifficulty FROM tbl_rate WHERE tbl_rate.rate != 0 GROUP BY rater_id"),
+						"COUNT(IF(rate='3',1,null)) AS idkRate, COUNT(IF(rate_difficulty='1',1,null)) AS veryEasyRate, COUNT(IF(rate_difficulty='2',1,null)) AS easyRate, " +
+						"COUNT(IF(rate_difficulty='3',1,null)) AS difficultRate, COUNT(IF(rate_difficulty='4',1,null)) AS veryDifficultRate, " +
+						"COUNT(IF(rate_difficulty='0',1,null)) AS noDifficulty FROM tbl_rate WHERE tbl_rate.rate != 0 GROUP BY rater_id"),
 				@NamedNativeQuery(name = "Rate.getBotStats",
 						resultSetMapping = "myMapping2",
 						query = "SELECT gituser as userId, COUNT(*) AS totalRate, COUNT(IF(rate='1',1,null)) As humanRate, " +
@@ -112,8 +112,8 @@ public class Rate  implements Serializable {
 	@Column(name = "rate")
 	private Short rate;
 
-	@Column(name = "rate_diffuculty")
-	private Short rateDiffuculty;
+	@Column(name = "rate_difficulty")
+	private Short rateDifficulty;
 
 	@Column(name = "description",length = 255)
 	private String description;
@@ -174,12 +174,12 @@ public class Rate  implements Serializable {
 		this.rate = rate;
 	}
 
-	public Short getRateDiffuculty() {
-		return rateDiffuculty;
+	public Short getRateDifficulty() {
+		return rateDifficulty;
 	}
 
-	public void setRateDiffuculty(Short rateDiffuculty) {
-		this.rateDiffuculty = rateDiffuculty;
+	public void setRateDifficulty(Short rateDifficulty) {
+		this.rateDifficulty = rateDifficulty;
 	}
 
 	public String getDescription() {

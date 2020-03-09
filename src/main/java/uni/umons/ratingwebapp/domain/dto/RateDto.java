@@ -25,7 +25,7 @@ public class RateDto implements BaseDto<uni.umons.ratingwebapp.domain.Rate> {
 
 	private Short rate;
 
-	private Short rateDiffuculty;
+	private Short rateDifficulty;
 
 	private String description;
 
@@ -53,12 +53,12 @@ public class RateDto implements BaseDto<uni.umons.ratingwebapp.domain.Rate> {
 		this.rate = rate;
 	}
 
-	public Short getRateDiffuculty() {
-		return rateDiffuculty;
+	public Short getRateDifficulty() {
+		return rateDifficulty;
 	}
 
-	public void setRateDiffuculty(Short rateDiffuculty) {
-		this.rateDiffuculty = rateDiffuculty;
+	public void setRateDifficulty(Short rateDifficulty) {
+		this.rateDifficulty = rateDifficulty;
 	}
 
 	public String getDescription() {
@@ -116,7 +116,7 @@ public class RateDto implements BaseDto<uni.umons.ratingwebapp.domain.Rate> {
 		rate.setGitUserId(this.getGitUser());
 		rate.setDescription(this.getDescription());
 		rate.setRatedAt(this.getRatedAt());
-		rate.setRateDiffuculty(this.getRateDiffuculty());
+		rate.setRateDifficulty(this.getRateDifficulty());
 		return rate;
 	}
 }

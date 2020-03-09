@@ -11,4 +11,5 @@ public interface GituserRepository extends BaseDao<GitUser, Long> {
 	GitUser findNextUser(Long uid);
 	GitUser findGitUsersByName(String username);
 	GitUser findByGitUserId(Long Id);
+	List<GitUser> getAllRatedUsers();
 }

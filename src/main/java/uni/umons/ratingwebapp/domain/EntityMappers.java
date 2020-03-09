@@ -27,6 +27,62 @@ public class EntityMappers {
         return gitUserDto;
     }
 
+    public static List<GitUserDto> GitusersToGitusersDto(List<GitUser> gusers)
+    {
+        if (gusers.size() == 0)
+        {
+            return null;
+        }
+        List<GitUserDto> gitUserDtos = new ArrayList<>();
+        for(GitUser user : gusers)
+        {
+            gitUserDtos.add(EntityMappers.GitUsertoGitUserDto(user));
+        }
+        return gitUserDtos;
+    }
+
+    public static List<RatedGitUserDto> GitusersToRatedGitUserDto(List<GitUser> gusers)
+    {
+        if (gusers.size() == 0)
+        {
+            return null;
+        }
+        List<RatedGitUserDto> ratedGitUserDtos = new ArrayList<>();
+        for(GitUser user : gusers)
+        {
+            RatedGitUserDto ratedGitUserDto = new RatedGitUserDto();
+            ratedGitUserDto.setId(user.getGitUserId());
+            ratedGitUserDto.setName(user.getName());
+            ratedGitUserDto.setRepository(user.getRepository());
+
+            if(user.getRates().get(0).getRate() != null)
+                ratedGitUserDto.setRate1(user.getRates().get(0).getRate());
+            if(user.getRates().get(0).getRateDifficulty()!=null)
+                ratedGitUserDto.setRateDifficulty1(user.getRates().get(0).getRateDifficulty());
+            if(user.getRates().get(0).getDescription()!= null)
+                ratedGitUserDto.setRateDescription1(user.getRates().get(0).getDescription());
+            if(user.getRates().get(0).getRater().getUsername() != null)
+                ratedGitUserDto.setRater1(user.getRates().get(0).getRater().getUsername());
+            if(user.getRates().size()>1) {
+                if(user.getRates().get(1).getRate() != null)
+                    ratedGitUserDto.setRate2(user.getRates().get(1).getRate());
+                if(user.getRates().get(1).getRateDifficulty()!=null)
+                    ratedGitUserDto.setRateDifficulty2(user.getRates().get(1).getRateDifficulty());
+                if(user.getRates().get(1).getDescription()!= null)
+                    ratedGitUserDto.setRateDescription2(user.getRates().get(1).getDescription());
+                if(user.getRates().get(1).getRater().getUsername() != null)
+                    ratedGitUserDto.setRater2(user.getRates().get(1).getRater().getUsername());
+            }else{
+                ratedGitUserDto.setRate2(-1);
+                ratedGitUserDto.setRateDifficulty2(-1);
+                ratedGitUserDto.setRateDescription2("");
+                ratedGitUserDto.setRater2("");
+            }
+            ratedGitUserDtos.add(ratedGitUserDto);
+        }
+        return ratedGitUserDtos;
+    }
+
     public static CommentDto CommentToCommentDto(Comment comment)
     {
         if(comment == null)
@@ -37,7 +93,11 @@ public class EntityMappers {
         commentDto.setAuthor(comment.getGitUser().getName());
         commentDto.setId(comment.getId());
         commentDto.setIssueType(comment.getIssueType());
-        commentDto.setCreatedAt(comment.getCreatedAt());
+        try {
+            commentDto.setCreatedAt(comment.getCreatedAt());
+        }catch(Exception e) {
+            commentDto.setCreatedAt(null);
+        }
         commentDto.setBody(comment.getBody());
         return commentDto;
     }
@@ -81,7 +141,7 @@ public class EntityMappers {
         rateDto.setGitUserRepo(rate.getGitUser().getRepository());
         rateDto.setDescription(rate.getDescription());
         rateDto.setRaterName(rate.getRater().getUsername());
-        rateDto.setRateDiffuculty(rate.getRateDiffuculty());
+        rateDto.setRateDifficulty(rate.getRateDifficulty());
         rateDto.setGitUser(rate.getGitUser().getGitUserId());
         return rateDto;
     }

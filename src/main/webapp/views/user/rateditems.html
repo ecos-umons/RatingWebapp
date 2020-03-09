@@ -9,7 +9,7 @@
   <script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.4/js/bootstrap.min.js}"></script>
   <script src="../../js/ratingapp.js" th:src="@{/js/ratingapp.js}"></script>
   <script src="../../js/jsgrid.min.js" th:src="@{/js/jsgrid.min.js}"></script>
-  <link rel="stylesheet" type="text/css" media="screen" href="../../css/common.css" th:href="@{/css/common.css}" />
+
   <link rel="stylesheet" type="text/css" media="screen" href="../../css/jsgrid-theme.min.css" th:href="@{/css/jsgrid-theme.min.css}" />
   <link rel="stylesheet" type="text/css" media="screen" href="../../css/jsgrid-theme.min.css" th:href="@{/css/jsgrid.min.css}" />
   <link rel="stylesheet" type="text/css" media="screen" href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}" />
@@ -79,11 +79,13 @@
       const rate_diff = [{id: 1, name: "Very easy"}, {id: 2, name: "Easy"}, {id: 3, name: "Difficult"}, {id: 4, name: "Very Difficult"}];
       debugger;
       $("#jsGrid1").jsGrid({
-        height: "800px",
+        maxHeight: "1822px",
         width: "100%",
 
         sorting: true,
         paging: true,
+
+        pageSize: 50,
 
         data: rate_data,
 
@@ -91,9 +93,19 @@
           { name: "gitUserName", type: "text", width: 150,title: "Account" },
           { name: "gitUserRepo", type: "text", width: 250,title: "Repository" },
           { name: "rate", type: "select", width: 50,title: "Rate", items: rate_values, valueField: "id", textField: "name",class: "rate" },
-          { name: "rateDiffuculty", type: "select", width: 50, title: "Difficulty", items: rate_diff, valueField: "id", textField: "name",class: "rateDiffuculty" },
+          { name: "rateDifficulty", type: "select", width: 50, title: "Difficulty", items: rate_diff, valueField: "id", textField: "name",class: "rateDifficulty" },
           { name: "ratedAt", type: "datetime", width: 100, title: "Rated At" }
-        ]
+        ],
+        rowClass: function(item, itemIndex) {
+          var finalclass = "";
+          if(item["rate"] === 3){
+            finalclass+=" idk-item"
+          }
+          if(item["rateDifficulty"] === 3 || item["rateDifficulty"] === 4 ){
+            finalclass += " difficult-item"
+          }
+          return finalclass;
+        },
       });
     }
 

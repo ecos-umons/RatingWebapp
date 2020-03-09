@@ -9,7 +9,7 @@
   <script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.4/js/bootstrap.min.js}"></script>
   <script src="../../js/ratingapp.js" th:src="@{/js/ratingapp.js}"></script>
   <script src="../../js/jsgrid.min.js" th:src="@{/js/jsgrid.min.js}"></script>
-  <link rel="stylesheet" type="text/css" media="screen" href="../../css/common.css" th:href="@{/css/common.css}" />
+
   <link rel="stylesheet" type="text/css" media="screen" href="../../css/jsgrid-theme.min.css" th:href="@{/css/jsgrid-theme.min.css}" />
   <link rel="stylesheet" type="text/css" media="screen" href="../../css/jsgrid-theme.min.css" th:href="@{/css/jsgrid.min.css}" />
   <link rel="stylesheet" type="text/css" media="screen" href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}" />
@@ -30,7 +30,7 @@
         <div class="col-xs-12">
           <div class="box box-solid" >
             <div class="box-header">
-              <h3 class="box-title">Your rated Items</h3>
+              <h3 class="box-title">All rated accounts</h3>
               <div class="box-tools">
                 <div class="input-group input-group-sm" style="width: 150px;">
                   <input type="text" id="table-search" name="table_search" class="form-control pull-right" placeholder="Search">
@@ -74,24 +74,48 @@
     });
     function createTable(rate_data) {
       const rate_values = [{id: 1, name: "Human"}, {id: 2, name: "Bot"}, {id: 3, name: "IDK"}];
-      const rate_diff = [{id: 1, name: "Very easy"}, {id: 2, name: "Easy"}, {id: 3, name: "Difficult"}, {id: 4, name: "Very Difficult"}];
+      const rate_diff = [{id: 1, name: "Veasy"}, {id: 2, name: "Easy"}, {id: 3, name: "Diff"}, {id: 4, name: "VDiff"}];
       debugger;
       $("#jsGrid1").jsGrid({
-        height: "800px",
+        maxHeight: "1822px",
         width: "100%",
 
         sorting: true,
         paging: true,
+        pageSize: 50,
 
         data: rate_data,
 
+      //{"name":"brotherlogic","repository":"brotherlogic/recordprocess","rate1":3,"rateDifficulty1":1,"rateDescription1":"","rater1":"mehdi","rate2":1,"rateDifficulty2":2,"rateDescription2":"","rater2":"tom"}
         fields: [
-          { name: "gitUserName", type: "text", width: 150,title: "Account" },
-          { name: "gitUserRepo", type: "text", width: 250,title: "Repository" },
-          { name: "rate", type: "select", width: 50,title: "Rate", items: rate_values, valueField: "id", textField: "name",class: "rate" },
-          { name: "rateDiffuculty", type: "select", width: 50, title: "Difficulty", items: rate_diff, valueField: "id", textField: "name",class: "rateDiffuculty" },
-          { name: "ratedAt", type: "datetime", width: 100, title: "Rated At" }
-        ]
+          { name: "name", type: "text", width: 80 ,title: "Account" },
+          { name: "repository", type: "text", width: 120,title: "Repository" },
+          { name: "rater1", type: "text", width: 50,title: "Rater1" },
+          { name: "rate1", type: "select", width: 40,title: "Rate1", items: rate_values, valueField: "id", textField: "name",class: "rate1" },
+          { name: "rateDifficulty1", type: "select", width: 50, title: "Diff", items: rate_diff, valueField: "id", textField: "name",class: "rateDifficulty1" },
+          { name: "rateDescription1", type: "text", width: 100,title: "Des" },
+          { name: "rater2", type: "text", width: 50,title: "Rater2" },
+          { name: "rate2", type: "select", width: 40,title: "Rate2", items: rate_values, valueField: "id", textField: "name",class: "rate2" },
+          { name: "rateDifficulty2", type: "select", width: 50, title: "Diff", items: rate_diff, valueField: "id", textField: "name",class: "rateDifficulty2" },
+          { name: "rateDescription2", type: "text", width: 100,title: "Des" },
+        ],
+        rowClick: function(args) {
+          window.open("../admin/getuserinfo/"+args.item["id"],'_blank');
+        },
+        rowClass: function(item, itemIndex) {
+          var finalclass = "";
+          if(item["rate1"] === 3 || item['rate2'] === 3){
+            finalclass+=" idk-item"
+          }
+          if(item["rateDifficulty1"] === 3 || item["rateDifficulty1"] === 4 || item["rateDifficulty2"] === 3 || item["rateDifficulty2"] === 4 ){
+            finalclass += " difficult-item"
+          }
+          if(item["rate1"] === 2 && item["rate2"] === 2 ){
+            finalclass += " bot"
+          }
+          return finalclass;
+        },
+
       });
     }
 

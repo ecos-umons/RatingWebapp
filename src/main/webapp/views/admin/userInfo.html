@@ -1,0 +1,218 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout/user">
+<head>
+  <title>rating page</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" th:src="@{/webjars/jquery/1.11.3/jquery.min.js}"></script>
+  <script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/3.3.4/js/bootstrap.min.js}"></script>
+  <script src="../../js/ratingapp.js" th:src="@{/js/ratingapp.js}"></script>
+
+  <link rel="stylesheet" type="text/css" media="screen" href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}" />
+  <link rel="stylesheet" type="text/css" media="screen" href="../../resources/font-awesome/css/font-awesome.min.css" th:href="@{/resources/font-awesome/css/font-awesome.min.css}" />
+  <link rel="stylesheet" type="text/css" media="screen" href="../../css/ratingapp.css" th:href="@{/css/ratingapp.css}" />
+
+</head>
+<body>
+<div id="page-wrapper" layout:fragment="content">
+  <div class="container-fluid">
+    <div class="row">
+          <section class="content-header">
+            <h2 class="PageTitle">Account</h2>
+          </section>
+
+          <section class="ratesec" id="ContentSec" style="min-height: 95px;">
+            <!-- Small boxes (Stat box) -->
+            <div class="row fixedElement" id="usersList">
+              <section class="col-lg-12" >
+                <div class="box box-solid">
+                    <div class="box-header">
+                        <i class="fa fa-info"></i>
+                        <h3 class="box-title">Account detail</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="col-lg-4 form-group">
+                            <label >Name</label>
+                            <div type="text" class="account-detail form-control account-name"></div>
+                        </div>
+                        <div class="col-lg-4 form-group">
+                            <label >Repository</label>
+                            <div type="text" class="account-detail form-control account-repo"></div>
+                        </div>
+                        <div class="col-lg-4 form-group">
+                            <label >Agreed rate</label>
+                            <div type="text" class="account-detail form-control account-rate"></div>
+                        </div>
+                        <div class="col-lg-3 form-group">
+                            <label >First rater</label>
+                            <div type="text" class="account-detail form-control rater1-name"></div>
+                        </div>
+                        <div class="col-lg-3 form-group">
+                            <label >Rate</label>
+                            <div type="text" class="account-detail form-control rater1-rate"></div>
+                        </div>
+                        <div class="col-lg-3 form-group">
+                            <label >Second Rater</label>
+                            <div type="text" class="account-detail form-control rater2-name"></div>
+                        </div>
+                        <div class="col-lg-3 form-group">
+                            <label >Rate</label>
+                            <div type="text" class="account-detail form-control rater2-rate"></div>
+                        </div>
+
+                    </div>
+                </div>
+              </section>
+
+            </div>
+          </section>
+        <div class="row row-content" id="list">
+        </div>
+        <div class="row loadmoresec" id="loadmoresec">
+        </div>
+    </div>
+  </div>
+  <script>
+
+    $(document).ready(function () {
+      var tableDiv = $('.row-content');
+      var data;
+      var Alldata;
+
+      var data;
+      var Alldata;
+      function loadNewUser() {
+        var uid = window.location.toString().split('/')[window.location.toString().split('/').length-1]
+        $.ajax({
+          cache: false,
+          type: "POST",
+          async: false,
+          url: "../getUserDetail/"+uid,
+          success: function (res) {
+            data = res;
+            Alldata = data;
+            if(data.toString().indexOf("/sign-in-process.html")>=0)
+            {
+              window.location.href = '../signin';
+            }
+            var rate ="Not decided yet";
+
+            $('.account-name').html(res.name);
+            $('.account-repo').html(res.repository);
+            $('.account-rate').html(rate);
+
+            var ratername1 = "Not specified";
+            var rate1 = "Not specified";
+            var ratername2 = "Not specified";
+            var rate2 = "Not specified";
+
+            debugger;
+            if(res.rateDtos[0] != null){
+                ratername1 = res.rateDtos[0].raterName;
+                rate1 = getRateName(res.rateDtos[0].rate) + "-" + getRateDifficultry(res.rateDtos[0].rateDifficulty)
+            }
+              if(res.rateDtos[1] != null){
+                  ratername2 = res.rateDtos[1].raterName;
+                  rate2 = getRateName(res.rateDtos[1].rate) + "-" + getRateDifficultry(res.rateDtos[1].rateDifficulty)
+                  if(res.rateDtos[0].rate === res.rateDtos[1].rate){
+                      rate = getRateName(res.rateDtos[0].rate)
+                  }
+              }
+              $('.rater1-name').html(ratername1);
+              $('.rater1-rate').html(rate1);
+              $('.rater2-name').html(ratername2);
+              $('.rater2-rate').html(rate2);
+            createTable();
+          },
+          Error: function (e) {
+            alert(e);
+          }
+        });
+      }
+      loadNewUser();
+
+      function getRateName(rate){
+          if(rate === 1){
+              return  "Human";
+          }else if(rate === 2){
+              return "Bot";
+          }else if(rate === 3){
+              return "IDK";
+          }
+          return "Not specified";
+      }
+      function getRateDifficultry(diff){
+            if(diff === 1){
+                return  "Very easy";
+            }else if(diff === 2){
+                return "Easy";
+            }else if(diff === 3){
+                return "Difficult";
+            }else if(diff === 4){
+                return "Very difficult";
+            }
+            return "Not specified";
+        }
+
+      function createTable() {
+        tableDiv.empty();
+
+        debugger;
+        data = data["comments"];
+        if(data.length < 20) {
+          for (var i = 0; i < data.length; i++) {
+            createItem(i, data[i].id,data[i]["body"],data[i]["issueType"],tableDiv)
+          }
+        }else{
+          for (var i = 0; i < 20 ; i++) {
+            createItem(i, data[i].id,escape(data[i]["body"]),data[i]["issueType"],tableDiv)
+          }
+          var foot = $('.loadmoresec');
+          var tbl = $('<div />').addClass('col-lg-12').addClass('col-xs-12').addClass('col-xl-12').addClass('connectedLoadMore').appendTo(foot);
+          var prbbox = $('<div />').addClass('entity-prop-box').addClass('bg-white').appendTo(tbl);
+          var inner = $('<div />').addClass('loadmore').html('<a href="#" class="entity-prop-box-footer load-more" style="margin-left: 7px"> Load More <i class="fa fa-plus"></i></a>');
+
+
+          prbbox.append(inner);
+
+          $('.entity-prop-box-footer.load-more').click(function (e) {
+            e.preventDefault();
+            for (var i = 20; i < data.length ; i++) {
+              createItem(i, data[i].id,escape(data[i]["body"]),data[i]["issueType"],tableDiv)
+            }
+            $('.connectedLoadMore').fadeOut(500);
+          });
+        }
+      }
+
+      function createItem(i, index , text, itemtype , table_div){
+        var tbl = $('<div />').attr("listId", i).attr("id", index).addClass('col-lg-4').addClass('col-sm-6').addClass('col-xs-12').addClass('col-xl-3').addClass('connectedSortable').appendTo(table_div);
+
+        var prbbox = $('<div />').addClass('entity-prop-box').addClass('bg-white').appendTo(tbl);
+        var inner = $('<div />').addClass('inner').appendTo(prbbox);
+        if(itemtype == "1") {
+          ($('<div />').addClass('entity-prop-box-footer-box')).appendTo(prbbox);
+        }else{
+          ($('<div />').addClass('entity-prop-box-footer-box-issue')).appendTo(prbbox);
+        }
+        inner.append($('<p />').html($.parseHTML( unescape(text) )));
+        tbl.hide().delay(i * (20 - (i < 20 ? i : 19))).fadeIn(500).appendTo(tbl);
+      }
+
+
+    });
+    $(window).scroll(function(e){
+      var $el = $('.fixedElement');
+      var isPositionFixed = ($el.css('position') == 'fixed');
+      if ($(this).scrollTop() > 200 && !isPositionFixed){
+        $el.css({'position': 'fixed', 'top': '0px','left':'0px','width':'103%'});
+      }
+      if ($(this).scrollTop() < 200 && isPositionFixed){
+        $el.css({'position': 'static', 'top': '0px','width':''});
+      }
+    });
+
+  </script>
+</div>
+</body>
+</html>

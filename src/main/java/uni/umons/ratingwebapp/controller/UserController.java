@@ -83,7 +83,7 @@ public class UserController {
 				return "User has modified data manually";
 			}
 			raterecord.setRate(rate);
-			raterecord.setRateDiffuculty(rateDifficulty);
+			raterecord.setRateDifficulty(rateDifficulty);
 			raterecord.setDescription(rateDescription);
 			raterecord.setRatedAt(LocalDateTime.now());
 			dataServices.UpdateRate(raterecord);

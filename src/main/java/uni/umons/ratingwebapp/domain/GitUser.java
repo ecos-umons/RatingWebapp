@@ -12,7 +12,7 @@ import java.util.List;
 		@NamedQuery(name = "GitUser.findAll", query = "SELECT u FROM GitUser u"),
 		@NamedQuery(name = "GitUser.findById", query = "SELECT u FROM GitUser u WHERE u.gitUserId = :id"),
 		@NamedQuery(name = "GitUser.findByName", query = "SELECT u FROM GitUser u WHERE u.name = :name"),
-		@NamedQuery(name = "GitUser.getNextUser", query = "SELECT u FROM GitUser u WHERE u.id > :id ORDER BY id")
+		@NamedQuery(name = "GitUser.getNextUser", query = "SELECT u FROM GitUser u WHERE u.id > :id ORDER BY id"),
 })
 public class GitUser  implements Serializable {
 

@@ -6,10 +6,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import uni.umons.ratingwebapp.domain.GitUser;
+import uni.umons.ratingwebapp.domain.dto.GitUserDto;
 import uni.umons.ratingwebapp.domain.dto.RateDto;
+import uni.umons.ratingwebapp.domain.dto.RatedGitUserDto;
 import uni.umons.ratingwebapp.service.DataServices;
 
 import javax.annotation.PreDestroy;
@@ -55,13 +59,30 @@ public class AdminController {
 	}
 
 
+	@PreAuthorize("hasRole('Administrator')")
+	@RequestMapping(value = "getuserinfo/{uid}")
+	public String getUserInfo(@PathVariable("uid") Long uid) {
+		return "admin/userInfo";
+	}
+
 
 	@PreAuthorize("hasRole('User') or hasRole('Administrator')")
 	@RequestMapping(value = "getAllRates" , method = RequestMethod.POST
 			,produces = "application/json")
 	public @ResponseBody
-	List<RateDto> GivemeAllRates()
+	List<RatedGitUserDto> GivemeAllRates()
 	{
-		return dataServices.getAllRates();
+		return dataServices.getAllRatedAccounts();
+		//return dataServices.getAllRates();
+	}
+
+
+	@PreAuthorize("hasRole('User') or hasRole('Administrator')")
+	@RequestMapping(value = "getUserDetail/{uid}" , method = RequestMethod.POST
+			,produces = "application/json")
+	public @ResponseBody
+	GitUserDto GivemeThisUser(@PathVariable("uid") Long uid)
+	{
+		return dataServices.getGituser(uid);
 	}
 }

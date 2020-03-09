@@ -66,6 +66,13 @@ public class DataServices {
 	}
 
 	@Transactional
+	public GitUserDto getGituser(Long id) {
+		GitUser gituser = gituserRepository.findByGitUserId(id);
+		logger.info("GitUser "+ gituser.getName() +" retrieved.");
+		return EntityMappers.GitUsertoGitUserDto(gituser);
+	}
+
+	@Transactional
 	public void RecordNewRate(RateDto ratedto)
 	{
 		logger.info("New rate added");
@@ -151,12 +158,8 @@ public class DataServices {
 		return homeStats ;
 	}
 
-//	@Transactional
-//	private xxx getStatistics()
-//	{
-//		List<RateDto> rates = new ArrayList<>();
-//		for(RateDto rate : rates){
-//			rate.
-//		}
-//	}
+	@Transactional
+	public List<RatedGitUserDto> getAllRatedAccounts(){
+		return EntityMappers.GitusersToRatedGitUserDto(gituserRepository.getAllRatedUsers());
+	}
 }

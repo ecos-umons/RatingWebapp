@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.rememberme.AbstractRememb
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import uni.umons.ratingwebapp.security.LoggingAccessDeniedHandler;
 
 import javax.servlet.DispatcherType;
@@ -45,11 +46,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-
-		httpSecurity.rememberMe().rememberMeServices(rememberMeServices()).key("posc").and();
-		httpSecurity.csrf().disable();
-		httpSecurity.headers().frameOptions().disable();
-		
 		// static resources
 		httpSecurity.authorizeRequests()
 		.antMatchers("/css/**", "/js/**", "/images/**", "/resources/**", "/webjars/**").permitAll();
@@ -58,17 +54,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						.antMatchers("/signin").anonymous()
 						.anyRequest()
 						.authenticated()
-						.and()
-					.formLogin()
+					.and()
+						.logout()
+						.clearAuthentication(true)
+						.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+						.logoutSuccessUrl("/signin?logout")
+					.and()
+						.formLogin()
 						.loginPage("/signin")
 						.loginProcessingUrl("/sign-in-process.html")
 						.failureUrl("/signin?error")
 						.usernameParameter("username")
 						.passwordParameter("password")
 						.defaultSuccessUrl("/home", false)
-						.and()
-					.logout()
-						.logoutSuccessUrl("/signin?logout");
+
+					.and()
+						.rememberMe()
+						.rememberMeServices(rememberMeServices())
+						.tokenRepository(persistentTokenRepository())
+						.key("AppKey")
+						.alwaysRemember(true)
+						.rememberMeParameter("remember-me")
+						.tokenValiditySeconds(24 * 60 * 60)
+					.and()
+						.csrf().disable()
+						.headers().frameOptions().disable();
 
 
 		httpSecurity.exceptionHandling().accessDeniedPage("/error/401");

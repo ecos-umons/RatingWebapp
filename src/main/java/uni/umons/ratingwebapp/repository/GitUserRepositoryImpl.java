@@ -72,6 +72,19 @@ public class GitUserRepositoryImpl extends BaseDaoImpl<GitUser, Long> implements
         }
     }
 
+    @Override
+    public List<GitUser> getAllRatedUsers() {
+        try {
+            return  entityManager
+                    .createNativeQuery(
+                            "SELECT * FROM tbl_github_user WHERE id in (select gituser from tbl_rate WHERE rate != 0) ;", GitUser.class
+                    )
+                    .getResultList();
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+
 //    @Override
 //    public List<Stats> getStat() {
 //        try {

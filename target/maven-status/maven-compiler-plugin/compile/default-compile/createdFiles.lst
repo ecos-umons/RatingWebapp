@@ -31,6 +31,7 @@ uni/umons/ratingwebapp/App.class
 uni/umons/ratingwebapp/repository/UserRepository.class
 uni/umons/ratingwebapp/security/CustomUserDetailsService.class
 uni/umons/ratingwebapp/domain/dto/GitUserDto.class
+uni/umons/ratingwebapp/domain/dto/RatedGitUserDto.class
 uni/umons/ratingwebapp/repository/CommentRepository.class
 uni/umons/ratingwebapp/repository/UserRoleRepository.class
 uni/umons/ratingwebapp/domain/User.class
